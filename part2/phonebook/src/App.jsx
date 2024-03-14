@@ -1,35 +1,75 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [persons, setPersons] = useState([
+    { name: "Arto Hellas", number: "040-123456", id: 1 },
+    { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
+    { name: "Dan Abramov", number: "12-43-234345", id: 3 },
+    { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
+  ]);
+  const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showAll, setShowAll] = useState(true);
+
+  const addPerson = (e) => {
+    e.preventDefault();
+
+    const newPerson = {
+      name: newName,
+      number: newNumber,
+    };
+
+    if (persons.some((p) => p.name === newPerson.name)) {
+      alert(`${newName} already exists!`);
+      setNewName("");
+      setNewNumber("");
+      return;
+    }
+
+    setPersons(persons.concat(newPerson));
+    setNewName("");
+    setNewNumber("");
+  };
+
+  const handlePersonChange = (e) => {
+    setNewName(e.target.value);
+  };
+
+  const handleNumberChange = (e) => setNewNumber(e.target.value);
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    if (searchTerm != null) setShowAll(false);
+  };
+
+  const personsToShow = showAll
+    ? persons
+    : persons.filter((p) =>
+        p.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+  console.log(personsToShow);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <h2>Phonebook</h2>
+      <Filter searchTerm={searchTerm} handleSearch={handleSearch} />
+      <h2>Add a new</h2>
+      <PersonForm
+        addPerson={addPerson}
+        handleNumberChange={handleNumberChange}
+        handlePersonChange={handlePersonChange}
+        newName={newName}
+        newNumber={newNumber}
+      />
+      <h2>Numbers</h2>
+      <Persons personsToShow={personsToShow} />
+    </div>
+  );
+};
 
-export default App
+export default App;

@@ -1,3 +1,6 @@
+import WeatherCard from "./WeatherCard";
+
+
 const Country = ({ country }) => {
   return (
     <div>
@@ -22,6 +25,7 @@ const Country = ({ country }) => {
 
         <img src={country?.flags?.png} alt={country?.flags?.alt} height={180} />
       </div>
+      <WeatherCard country={country} />
     </div>
   );
 };

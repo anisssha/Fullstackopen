@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// VITE_OPEN_WEATHER_API_KEY=8fd712b27f804821017a48b121601135
 
 const api_key = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
 
